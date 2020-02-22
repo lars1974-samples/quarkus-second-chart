@@ -6,7 +6,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "quarkus-second.restapp-fullname" -}}
-{{- printf "%s-%s-restapp" .Chart.Name .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-restapp" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -34,7 +34,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "quarkus-second.database-fullname" -}}
-{{- printf "%s-%s-database" .Chart.Name .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-database" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
