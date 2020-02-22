@@ -24,3 +24,6 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          envFrom:
+            - secretRef:
+                name: {{ include "quarkus-second.database-fullname" . }}
