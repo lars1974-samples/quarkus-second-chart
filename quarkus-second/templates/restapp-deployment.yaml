@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "quarkus-second.restapp-fullname" . }}
+  labels:
+    {{- include "quarkus-second.restapp-labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "quarkus-second.restapp-selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "quarkus-second.restapp-selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        {{ .Values.restapp.imagePullSecrets }}
+      containers:
+        - name: {{ include "quarkus-second.restapp-fullname" . }}
+          image: "{{ .Values.restapp.image.repository }}:{{ .Values.restapp.image.version }}"
+          imagePullPolicy: {{ .Values.restapp.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
