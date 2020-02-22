@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "quarkus-second.database-labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicaCount: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "quarkus-second.database-selectorLabels" . | nindent 6 }}
