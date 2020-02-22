@@ -5,10 +5,23 @@
 
 restapp:
   image:
-    repository: nginx
+    repository: kubernetes4lrn.azurecr.io/quarkus-first
     pullPolicy: IfNotPresent
     imagePullSecrets: []
-    version: 1.0.0
+    version: latest
+
+  replicaCount: 1
+
+  service:
+    type: ClusterIP
+    port: 80
+
+database:
+  image:
+    repository: postgres
+    pullPolicy: IfNotPresent
+    imagePullSecrets: []
+    version: 9.6.17-alpine
 
   replicaCount: 1
 

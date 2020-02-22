@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "quarkus-second.database-fullname" . }}
+  labels:
+    {{- include "quarkus-second.database-labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "quarkus-second.database-selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "quarkus-second.database-selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        {{ .Values.database.imagePullSecrets }}
+      containers:
+        - name: {{ include "quarkus-second.database-fullname" . }}
+          image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.version }}"
+          imagePullPolicy: {{ .Values.database.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
