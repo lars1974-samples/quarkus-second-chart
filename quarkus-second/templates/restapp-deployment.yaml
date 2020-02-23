@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "quarkus-second.restapp-fullname" . }}
+  name: {{ include "quarkus-second.fullname" ( set . "Deployment" .Values.restapp ) }}
   labels:
-    {{- include "quarkus-second.restapp-labels" . | nindent 4 }}
+    {{- include "quarkus-second.labels" ( set . "Deployment" .Values.restapp ) | nindent 4 }}
 spec:
   replicaCount: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "quarkus-second.restapp-selectorLabels" . | nindent 6 }}
+      {{- include "quarkus-second.selectorLabels" ( set . "Deployment" .Values.restapp ) | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "quarkus-second.restapp-selectorLabels" . | nindent 8 }}
+        {{- include "quarkus-second.selectorLabels" ( set . "Deployment" .Values.restapp ) | nindent 8 }}
     spec:
       imagePullSecrets:
         {{ .Values.restapp.imagePullSecrets }}
       containers:
-        - name: {{ include "quarkus-second.restapp-fullname" . }}
+        - name: {{ include "quarkus-second.fullname" ( set . "Deployment" .Values.restapp ) }}
           image: "{{ .Values.restapp.image.repository }}:{{ .Values.restapp.image.version }}"
           imagePullPolicy: {{ .Values.restapp.image.pullPolicy }}
           ports:

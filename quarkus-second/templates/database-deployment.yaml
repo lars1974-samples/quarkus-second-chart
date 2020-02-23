@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "quarkus-second.database-fullname" . }}
+  name: {{ include "quarkus-second.fullname" ( set . "Deployment" .Values.database ) }}
   labels:
-    {{- include "quarkus-second.database-labels" . | nindent 4 }}
+    {{- include "quarkus-second.labels" ( set . "Deployment" .Values.database ) | nindent 4 }}
 spec:
   replicaCount: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "quarkus-second.database-selectorLabels" . | nindent 6 }}
+      {{- include "quarkus-second.selectorLabels" ( set . "Deployment" .Values.database ) | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "quarkus-second.database-selectorLabels" . | nindent 8 }}
+        {{- include "quarkus-second.selectorLabels" ( set . "Deployment" .Values.database )  | nindent 8 }}
     spec:
       imagePullSecrets:
         {{ .Values.database.imagePullSecrets }}
       containers:
-        - name: {{ include "quarkus-second.database-fullname" . }}
+        - name: {{ include "quarkus-second.fullname" ( set . "Deployment" .Values.database )  }}
           image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.version }}"
           imagePullPolicy: {{ .Values.database.image.pullPolicy }}
           ports:
@@ -26,4 +26,4 @@ spec:
               protocol: TCP
           envFrom:
             - secretRef:
-                name: {{ include "quarkus-second.database-fullname" . }}
+                name: {{ include "quarkus-second.fullname" ( set . "Deployment" .Values.database )  }}

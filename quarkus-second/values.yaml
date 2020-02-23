@@ -17,6 +17,7 @@ restapp:
     port: 80
 
 database:
+  name: database
   image:
     repository: postgres
     pullPolicy: IfNotPresent

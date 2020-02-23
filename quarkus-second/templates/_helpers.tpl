@@ -1,57 +1,30 @@
 {{/* vim: set filetype=mustache: */}}
 
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "quarkus-second.restapp-fullname" -}}
-{{- printf "%s-restapp" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{/* Create a default fully qualified app name. If release name contains chart name it will be used as a full name. */}}
+{{- define "quarkus-second.fullname" -}}
+{{- $name := .Chart.Name -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Deployment.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/*
-Common labels
-*/}}
-{{- define "quarkus-second.restapp-labels" -}}
-helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-{{ include "quarkus-second.restapp-selectorLabels" . }}
-app.kubernetes.io/version: {{ .Values.restapp.image.version | quote }}
+{{/* Create chart name and version as used by the chart label. */}}
+{{- define "quarkus-second.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/* Common labels */}}
+{{- define "quarkus-second.labels" -}}
+helm.sh/chart: {{ include "quarkus-second.chart" . }}
+{{ include "quarkus-second.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Deployment.image.version | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
-{{/*
-Selector labels
-*/}}
-{{- define "quarkus-second.restapp-selectorLabels" -}}
-app.kubernetes.io/name: restapp
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/part-of: {{ .Chart.Name }}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "quarkus-second.database-fullname" -}}
-{{- printf "%s-database" .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "quarkus-second.database-labels" -}}
-helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-{{ include "quarkus-second.database-selectorLabels" . }}
-app.kubernetes.io/version: {{ .Values.database.image.version | quote }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Selector labels
-*/}}
-{{- define "quarkus-second.database-selectorLabels" -}}
-app.kubernetes.io/name: database
+{{/* Selector labels */}}
+{{- define "quarkus-second.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Deployment.name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/part-of: {{ .Chart.Name }}
 {{- end -}}
